@@ -17,6 +17,10 @@ Thanks [obelisk](https://github.com/BennyHallett/obelisk) for `mix perf`, which 
 
 Please note: project is 2 day old (Stand: 20.07.2015) and in alpha state, that interface (at least for indexes) will be changed to export less elixir structures.
 
+## Roadmap
+
+Roadmap for [Version 0.1.0](https://github.com/liveforeverx/lime/milestones/0.1.0) added.
+
 ## Build a project
 
 ```
