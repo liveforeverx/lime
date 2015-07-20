@@ -2,7 +2,7 @@ defmodule Lime.Init do
   @moduledoc """
   Implementation for CLI `init` command. It scaffolds your blog.
   """
-  @dirs ["content", "static", "layout"]
+  @dirs ["content", "static", "layouts"]
 
   @doc """
   Initial scaffolding of your blog.
