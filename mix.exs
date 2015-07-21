@@ -42,6 +42,7 @@ defmodule Lime.Mixfile do
      {:sbroker, "~> 0.7.0"},
      {:exquisite, github: "meh/exquisite"},
      {:ex2ms, "~> 1.2.0"},
+     {:fs, "~> 0.9.1"},
      {:rss, "~> 0.2.1"}]
   end
 end

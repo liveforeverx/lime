@@ -1,6 +1,6 @@
 defmodule Lime.Layout do
-  def compile(theme) do
-    layout_theme = "themes/#{theme}/layouts"
+  def compile(conf) do
+    layout_theme = "themes/#{conf.theme}/layouts"
     overwrite_layouts = Path.wildcard("layouts/**/*.html") |> Enum.map &(Path.relative_to(&1, "layouts"))
     theme_layouts = Path.join(layout_theme, "**/*.html")
                     |> Path.wildcard

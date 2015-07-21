@@ -7,6 +7,7 @@
   "ex2ms": {:hex, :ex2ms, "1.2.0"},
   "exactor": {:hex, :exactor, "2.1.2"},
   "exquisite": {:git, "git://github.com/meh/exquisite.git", "be60125f6b50bb77256b0c27c579042851ec235c", []},
+  "fs": {:hex, :fs, "0.9.2"},
   "plug": {:hex, :plug, "0.13.0"},
   "ranch": {:hex, :ranch, "1.1.0"},
   "rss": {:hex, :rss, "0.2.1"},

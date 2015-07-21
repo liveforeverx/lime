@@ -6,8 +6,8 @@ defmodule Lime.Assets do
   @doc """
   All static files from theme and project will be copied to a configured `publish_dir`
   """
-  def copy(theme, publish_dir) do
-    File.cp_r("themes/#{theme}/static", publish_dir)
-    File.cp_r("static", publish_dir)
+  def copy(conf) do
+    File.cp_r("themes/#{conf.theme}/static", conf.publish_dir)
+    File.cp_r("static", conf.publish_dir)
   end
 end

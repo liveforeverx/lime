@@ -17,29 +17,19 @@ defmodule Lime do
   @doc """
   Main function for CLI.
   """
-  def main(["init", path]) do
-    Lime.Init.run(path)
+  @parse_opts [strict: [watch: :boolean, reload: :boolean, dev: :boolean], aliases: [w: :watch, r: :reload, d: :dev]]
+  def main(arguments) do
+    {options, values, _} = OptionParser.parse(arguments, @parse_opts)
+    run(values, options)
   end
 
-  def main(["page", _path]) do
-    throw :not_implemented_yet
-  end
+  def run(["init", path], options),  do: Lime.Init.run(path, options)
+  def run(["new", _path], _options), do: throw :not_implemented_yet
+  def run(["build"], options),       do: Lime.Build.run(options)
+  def run(["server"], options),      do: Lime.Server.run(options)
+  def run(_, _),                     do: help
 
-  def main(["build"]) do
-    Lime.Build.run
-  end
-
-  def main(["server"]) do
-    Application.start :cowboy
-    Application.start :plug
-    IO.puts "Starting Cowboy server. Browse to http://localhost:4000/"
-    IO.puts "Press <CTRL+C> <CTRL+C> to quit."
-    { :ok, pid } = Plug.Adapters.Cowboy.http Lime.Plug.Server, []
-    Process.link( pid )
-    :timer.sleep(:infinity)
-  end
-
-  def main(_) do
+  def help do
     IO.puts """
 lime is the main command, used to build your Lime site.
 

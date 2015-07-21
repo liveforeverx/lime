@@ -1,12 +1,12 @@
 defmodule Lime.Paginator do
   import Exquisite
 
-  def run(_pool, conf, publish_dir) do
+  def run(_pool, conf) do
     paginate = conf[:paginate] || 1
     template = conf.layout.index
-    meta = %{conf: conf, template: template, publish: publish_dir}
+    meta = %{conf: conf, template: template}
     all_pages = div(:ets.info(:lime_posts, :size) - 1, paginate)
-    Path.join(publish_dir, "page") |> File.mkdir_p!()
+    Path.join(conf.publish_dir, "page") |> File.mkdir_p!()
     recursive_run(meta, 0, all_pages, paginate)
   end
 
@@ -33,7 +33,7 @@ defmodule Lime.Paginator do
              link: "#{meta.conf.base_url}/#{relative_link}",
              posts: posts}
     rendered = CompiledLayout.render(meta.template, meta.conf, page)
-    Lime.Page.write_html(meta, may_be_index(relative_link), rendered)
+    Lime.Page.write_html(meta.conf, may_be_index(relative_link), rendered)
   end
 
   defp rel_link(0, _), do: "/"
