@@ -1,7 +1,7 @@
 Lime
 ====
 
-Lime is a static site generator written in [Elixir](http://elixir-lang.org/). Lime takes a directory with content and templates and renders them into a full HTML website. Lime is heavily inspired by [Hugo](https://github.com/spf13/hugo). I like Hugo, but some small unchangable behaviours have constrained me to write my own, to experiment with my own.
+Lime is a static site generator written in [Elixir](http://elixir-lang.org/). Lime takes a directory with content and templates and renders them into a full HTML website. Lime is heavily inspired by [Hugo](https://github.com/spf13/hugo). I like Hugo, but some small unchangable behaviours have constrained me to write my own, to experiment with my own. For example: simple thing, but it possible to use spaces in tags.
 
 Lime relies on Markdown files with [TOML](https://github.com/toml-lang/toml) front matter for meta data. Implementation use advantages of multi cores of your computer for increasing of spead.
 

@@ -21,6 +21,7 @@ defmodule Lime.Layout do
           {:ok, binary} = Calendar.Strftime.strftime(parsed, format)
           binary
         end
+        defdelegate index_link(index, value), to: Lime.Indexes
       end
     end |> Code.compile_quoted
   end

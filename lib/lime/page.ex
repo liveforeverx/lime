@@ -38,7 +38,7 @@ defmodule Lime.Page do
         ConCache.dirty_put(:lime_posts, page.date, Map.put(page, :summary, summary))
         for {_, index} <- meta.conf.indexes, keys = page[index] || [],
             key <- keys do
-          ConCache.update :lime_indexes, {index, key}, &({:ok, Map.put((&1 || %{}), page.title, page.link)})
+          ConCache.update :lime_indexes, {index, key}, &({:ok, Map.put((&1 || %{}), page.title, page)})
         end
     end
   end
