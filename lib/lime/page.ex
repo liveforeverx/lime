@@ -18,13 +18,15 @@ defmodule Lime.Page do
     "+++\n" <> post = File.read!(file)
     [toml, markdown] = :binary.split(post, "\n+++\n")
     page = Toml.parse(toml)
-    content = Earmark.to_html(markdown)
-    relative_link = Path.rootname(file) |> Path.relative_to(meta.conf.content_dir)
-    page = Map.merge(page, %{rel_link: relative_link,
+    unless page[:draft] && (not meta.conf.drafts) do
+      content = Earmark.to_html(markdown)
+      relative_link = Path.rootname(file) |> Path.relative_to(meta.conf.content_dir)
+      page = Map.merge(page, %{rel_link: relative_link,
                              link: "#{meta.conf.base_url}/#{relative_link}"})
-    index_page(page, meta, markdown)
-    rendered = CompiledLayout.render(meta.template, meta.conf, Map.put(page, :content, content))
-    write_html(meta.conf, relative_link, rendered)
+      index_page(page, meta, markdown)
+      rendered = CompiledLayout.render(meta.template, meta.conf, Map.put(page, :content, content))
+      write_html(meta.conf, relative_link, rendered)
+    end
   end
 
   def index_page(_page, %{index: false} = _meta, _markdown), do: nil

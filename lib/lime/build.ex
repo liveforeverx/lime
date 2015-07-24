@@ -20,19 +20,19 @@ defmodule Lime.Build do
   """
   def run(options) do
     pool = init()
-    conf = read_conf()
+    conf = read_conf(options)
     clean conf.publish_dir
 
     copy_assets(conf)
     compile_layouts(pool, conf)
     if options[:watch] do
       load_fs()
-      watch(pool, conf)
+      watch(pool, conf, options)
     end
   end
 
-  defp rerun(pool) do
-    conf = read_conf()
+  defp rerun(pool, options) do
+    conf = read_conf(options)
     copy_assets(conf)
     compile_layouts(pool, conf)
     conf
@@ -70,12 +70,13 @@ defmodule Lime.Build do
     Lime.Pool.start
   end
 
-  defp read_conf() do
+  defp read_conf(options) do
     File.read!("config.toml")
     |> Lime.Toml.parse
     |> update_in([:indexes], &Enum.map(&1, fn({index, name}) -> {index, String.to_atom(name)} end))
     |> Map.put_new(:publish_dir, @public)
     |> Map.put_new(:content_dir, @content)
+    |> Map.put_new(:drafts, options[:drafts] || false)
   end
 
   defp clean() do
@@ -88,24 +89,22 @@ defmodule Lime.Build do
     :fs.subscribe
   end
 
-  def watch(pool, conf = %{content_dir: content_dir, publish_dir: publish_dir}) do
+  def watch(pool, conf = %{content_dir: content_dir, publish_dir: publish_dir}, options) do
     receive do
       {_, {:fs, :file_event}, {file, _}} ->
         new_conf? = case file = Path.relative_to_cwd(file) do
-          "config.toml" <> _ -> rerun(pool)
+          "config.toml" <> _ -> rerun(pool, options)
           "static" <> _      -> copy_assets(conf)
           "layouts" <> _     -> compile_layouts(pool, conf)
           _ ->
             if match?({0, _}, :binary.match(file, content_dir)) do
               compile_content(pool, conf)
-            else if match?({0, _}, :binary.match(file, publish_dir)) do
-              watch(pool, conf)
-            else
+            else unless match?({0, _}, :binary.match(file, publish_dir)) do
               IO.puts "ignore file event #{file}"
               nil
             end end
         end
-        watch(pool, new_conf? || conf)
+        watch(pool, new_conf? || conf, options)
     end
   end
 
