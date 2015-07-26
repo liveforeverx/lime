@@ -40,7 +40,6 @@ defmodule Lime.Build do
 
   defp copy_assets(conf) do
     time "copy assets", Lime.Assets.copy(conf)
-    conf
   end
 
   defp compile_layouts(pool, conf) do
@@ -62,6 +61,7 @@ defmodule Lime.Build do
     time "compile pages", Lime.Page.render_all(pool, conf, "")
     time "compile pagination", Lime.Paginator.run(pool, conf)
     time "compile indexes", Lime.Indexes.run(pool, conf)
+    time "compile defaults", Lime.Page.render_defaults(pool, conf)
   end
 
   defp init() do
@@ -71,12 +71,16 @@ defmodule Lime.Build do
   end
 
   defp read_conf(options) do
-    File.read!("config.toml")
-    |> Lime.Toml.parse
-    |> update_in([:indexes], &Enum.map(&1, fn({index, name}) -> {index, String.to_atom(name)} end))
-    |> Map.put_new(:publish_dir, @public)
-    |> Map.put_new(:content_dir, @content)
-    |> Map.put_new(:drafts, options[:drafts] || false)
+    conf = File.read!("config.toml")
+           |> Lime.Toml.parse
+           |> update_in([:indexes], &Enum.map(&1, fn({index, name}) -> {index, String.to_atom(name)} end))
+           |> Map.put_new(:publish_dir, @public)
+           |> Map.put_new(:content_dir, @content)
+           |> Map.put_new(:drafts, options[:drafts] || false)
+    case options[:dev] do
+      :true -> Map.put(conf, :base_url, "http://localhost:4000")
+      _ -> conf
+    end
   end
 
   defp clean() do

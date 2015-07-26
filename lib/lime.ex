@@ -17,7 +17,7 @@ defmodule Lime do
   @doc """
   Main function for CLI.
   """
-  @parse_opts [strict: [watch: :boolean, reload: :boolean, drafts: :boolean],
+  @parse_opts [strict: [watch: :boolean, reload: :boolean, drafts: :boolean, dev: :boolean],
                aliases: [w: :watch, r: :reload, d: :drafts]]
   def main(arguments) do
     {options, values, _} = OptionParser.parse(arguments, @parse_opts)

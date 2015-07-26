@@ -6,6 +6,10 @@ defmodule Lime.Server do
     IO.puts "Press <CTRL+C> <CTRL+C> to quit."
     { :ok, pid } = Plug.Adapters.Cowboy.http Lime.Plug.Server, []
     Process.link( pid )
-    if options[:watch], do: Lime.Build.run(options)
+    if options[:watch] do
+      Lime.Build.run(options)
+    else
+      :timer.sleep(:infinity)
+    end
   end
 end
